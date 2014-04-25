@@ -1,0 +1,281 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Tutorial</title>
+<link rel="stylesheet" href="http://www.boost.org/doc/libs/1_55_0/doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="../index.html" title="Chapter&#160;1.&#160;Boost.Align">
+<link rel="up" href="../index.html" title="Chapter&#160;1.&#160;Boost.Align">
+<link rel="prev" href="rationale.html" title="Rationale">
+<link rel="next" href="examples.html" title="Examples">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr>
+<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="http://www.boost.org/doc/libs/1_55_0/boost.png"></td>
+<td align="center"><a href="http://www.boost.org/doc/libs/1_55_0/index.html">Home</a></td>
+<td align="center"><a href="http://www.boost.org/doc/libs/1_55_0/libs/libraries.htm">Libraries</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/doc/libs/1_55_0/more/index.htm">More</a></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="rationale.html"><img src="http://www.boost.org/doc/libs/1_55_0/doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="http://www.boost.org/doc/libs/1_55_0/doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="http://www.boost.org/doc/libs/1_55_0/doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="examples.html"><img src="http://www.boost.org/doc/libs/1_55_0/doc/src/images/next.png" alt="Next"></a>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="align.tutorial"></a><a class="link" href="tutorial.html" title="Tutorial">Tutorial</a>
+</h2></div></div></div>
+<div class="toc"><dl class="toc">
+<dt><span class="section"><a href="tutorial.html#align.tutorial.align_a_pointer_to_storage">Align a pointer
+      to storage</a></span></dt>
+<dt><span class="section"><a href="tutorial.html#align.tutorial.alignment_aware_allocation">Alignment
+      aware allocation</a></span></dt>
+<dt><span class="section"><a href="tutorial.html#align.tutorial.use_an_alignment_allocator">Use an alignment
+      allocator</a></span></dt>
+<dt><span class="section"><a href="tutorial.html#align.tutorial.adapt_allocator_for_alignment">Adapt allocator
+      for alignment</a></span></dt>
+<dt><span class="section"><a href="tutorial.html#align.tutorial.alignment_aware_deleter">Alignment aware
+      deleter</a></span></dt>
+<dt><span class="section"><a href="tutorial.html#align.tutorial.verifying_pointer_alignment">Verifying
+      pointer alignment</a></span></dt>
+</dl></div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="align.tutorial.align_a_pointer_to_storage"></a><a class="link" href="tutorial.html#align.tutorial.align_a_pointer_to_storage" title="Align a pointer to storage">Align a pointer
+      to storage</a>
+</h3></div></div></div>
+<p>
+        Include the align.hpp header for access to the function <code class="computeroutput"><span class="identifier">align</span></code>.
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">align</span><span class="special">/</span><span class="identifier">align</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+</pre>
+<p>
+      </p>
+<p>
+        Use the <code class="computeroutput"><span class="identifier">align</span></code> function to
+        adjust a pointer so that it is suitably aligned to fit a desired size in
+        given space.
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">if</span> <span class="special">(!</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">alignment</span><span class="special">::</span><span class="identifier">align</span><span class="special">(</span><span class="identifier">alignment</span><span class="special">,</span> <span class="identifier">size</span><span class="special">,</span> <span class="identifier">p</span><span class="special">,</span> <span class="identifier">space</span><span class="special">))</span> <span class="special">{</span>
+    <span class="keyword">throw</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">exception</span><span class="special">();</span>
+<span class="special">}</span>
+</pre>
+<p>
+        If successful, the space is decreased by the byte count the pointer was advanced
+        for alignment.
+      </p>
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="http://www.boost.org/doc/libs/1_55_0/doc/src/images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+          Consult the reference section of this documentation for the requirements
+          and effects.
+        </p></td></tr>
+</table></div>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="align.tutorial.alignment_aware_allocation"></a><a class="link" href="tutorial.html#align.tutorial.alignment_aware_allocation" title="Alignment aware allocation">Alignment
+      aware allocation</a>
+</h3></div></div></div>
+<p>
+        Include the aligned_alloc.hpp header for access to functions <code class="computeroutput"><span class="identifier">aligned_alloc</span></code> and <code class="computeroutput"><span class="identifier">aligned_free</span></code>.
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">align</span><span class="special">/</span><span class="identifier">aligned_alloc</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+</pre>
+<p>
+      </p>
+<p>
+        Allocate an object of a desired alignment and size using the <code class="computeroutput"><span class="identifier">aligned_alloc</span></code> allocation function.
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">void</span><span class="special">*</span> <span class="identifier">p</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">alignment</span><span class="special">::</span><span class="identifier">aligned_alloc</span><span class="special">(</span><span class="identifier">alignment</span><span class="special">,</span> <span class="identifier">size</span><span class="special">);</span>
+<span class="keyword">if</span> <span class="special">(!</span><span class="identifier">p</span><span class="special">)</span> <span class="special">{</span>
+    <span class="keyword">throw</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">bad_alloc</span><span class="special">();</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<p>
+        Deallocate the object allocated above, when done, using the <code class="computeroutput"><span class="identifier">aligned_free</span></code> deallocation function.
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">alignment</span><span class="special">::</span><span class="identifier">aligned_free</span><span class="special">(</span><span class="identifier">p</span><span class="special">);</span>
+</pre>
+<p>
+      </p>
+<p>
+        These functions are alignment aware alternatives to <code class="computeroutput"><span class="special">::</span><span class="keyword">operator</span> <span class="keyword">new</span></code>
+        and <code class="computeroutput"><span class="special">::</span><span class="keyword">operator</span>
+        <span class="keyword">delete</span></code>.
+      </p>
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="http://www.boost.org/doc/libs/1_55_0/doc/src/images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+          Prefer the alignment allocators with containers or smart pointers instead
+          of managing memory with raw pointers.
+        </p></td></tr>
+</table></div>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="align.tutorial.use_an_alignment_allocator"></a><a class="link" href="tutorial.html#align.tutorial.use_an_alignment_allocator" title="Use an alignment allocator">Use an alignment
+      allocator</a>
+</h3></div></div></div>
+<p>
+        Include the aligned_allocator.hpp header for access to the class template
+        <code class="computeroutput"><span class="identifier">aligned_allocator</span></code>.
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">align</span><span class="special">/</span><span class="identifier">aligned_allocator</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+</pre>
+<p>
+      </p>
+<p>
+        Turn any container into one that supports over-aligned types using the <code class="computeroutput"><span class="identifier">aligned_allocator</span></code> allocator.
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">type</span><span class="special">,</span>
+    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">alignment</span><span class="special">::</span><span class="identifier">aligned_allocator</span><span class="special">&lt;</span><span class="identifier">type</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="identifier">v</span><span class="special">;</span>
+</pre>
+<p>
+      </p>
+<p>
+        The <code class="computeroutput"><span class="identifier">vector</span></code> elements will
+        be correctly aligned even when <code class="computeroutput"><span class="identifier">type</span></code>
+        has an extended alignment specified.
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span>
+    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">alignment</span><span class="special">::</span><span class="identifier">aligned_allocator</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="number">64</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="identifier">v</span><span class="special">;</span>
+</pre>
+<p>
+      </p>
+<p>
+        As shown above, can optionally specify a minimum alignment value to use for
+        all allocations.
+      </p>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="align.tutorial.adapt_allocator_for_alignment"></a><a class="link" href="tutorial.html#align.tutorial.adapt_allocator_for_alignment" title="Adapt allocator for alignment">Adapt allocator
+      for alignment</a>
+</h3></div></div></div>
+<p>
+        Include the aligned_allocator_adaptor.hpp header for access to the class
+        <code class="computeroutput"><span class="identifier">aligned_allocator_adaptor</span></code>.
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">align</span><span class="special">/</span><span class="identifier">aligned_allocator_adaptor</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+</pre>
+<p>
+      </p>
+<p>
+        You can use this adaptor to turn any existing allocator into one that supports
+        allocation of over-aligned types.
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">Allocator</span> <span class="identifier">a</span><span class="special">;</span>
+<span class="identifier">boost</span><span class="special">::</span><span class="identifier">alignment</span><span class="special">::</span><span class="identifier">aligned_allocator_adaptor</span><span class="special">&lt;</span><span class="identifier">Allocator</span><span class="special">,</span>
+    <span class="identifier">Alignment</span><span class="special">&gt;</span> <span class="identifier">b</span><span class="special">(</span><span class="identifier">a</span><span class="special">);</span>
+</pre>
+<p>
+      </p>
+<p>
+        Specifying the minimum alignment, as shown above, is optional, just as it
+        is with <code class="computeroutput"><span class="identifier">aligned_allocator</span></code>.
+      </p>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="align.tutorial.alignment_aware_deleter"></a><a class="link" href="tutorial.html#align.tutorial.alignment_aware_deleter" title="Alignment aware deleter">Alignment aware
+      deleter</a>
+</h3></div></div></div>
+<p>
+        Include the aligned_delete.hpp header for access to the class <code class="computeroutput"><span class="identifier">aligned_delete</span></code>.
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">align</span><span class="special">/</span><span class="identifier">aligned_delete</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+</pre>
+<p>
+      </p>
+<p>
+        When using <code class="computeroutput"><span class="identifier">aligned_alloc</span></code>
+        for allocation, <code class="computeroutput"><span class="identifier">aligned_delete</span></code>
+        can be used as a deleter.
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">unique_ptr</span><span class="special">&lt;</span><span class="identifier">type</span><span class="special">,</span>
+    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">alignment</span><span class="special">::</span><span class="identifier">aligned_delete</span><span class="special">&gt;</span> <span class="identifier">p</span><span class="special">;</span>
+</pre>
+<p>
+      </p>
+<p>
+        As indicated above, it can serve as a replacement for <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">default_delete</span></code>.
+      </p>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="align.tutorial.verifying_pointer_alignment"></a><a class="link" href="tutorial.html#align.tutorial.verifying_pointer_alignment" title="Verifying pointer alignment">Verifying
+      pointer alignment</a>
+</h3></div></div></div>
+<p>
+        Include the is_aligned.hpp header for access to the function <code class="computeroutput"><span class="identifier">is_aligned</span></code>.
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">align</span><span class="special">/</span><span class="identifier">is_aligned</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+</pre>
+<p>
+      </p>
+<p>
+        You can use the <code class="computeroutput"><span class="identifier">is_aligned</span></code>
+        function to test the minimum alignment of a pointer.
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">assert</span><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">alignment</span><span class="special">::</span><span class="identifier">is_aligned</span><span class="special">(</span><span class="number">16</span><span class="special">,</span> <span class="identifier">p</span><span class="special">));</span>
+</pre>
+<p>
+      </p>
+<p>
+        This can be used for verification or to choose a fast code path for aligned
+        memory.
+      </p>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2014 Glen Fernandes<p>
+        Distributed under the <a href="http://boost.org/LICENSE_1_0.txt" target="_top">Boost
+        Software License, Version 1.0</a>.
+      </p>
+</div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="rationale.html"><img src="http://www.boost.org/doc/libs/1_55_0/doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="http://www.boost.org/doc/libs/1_55_0/doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="http://www.boost.org/doc/libs/1_55_0/doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="examples.html"><img src="http://www.boost.org/doc/libs/1_55_0/doc/src/images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>
